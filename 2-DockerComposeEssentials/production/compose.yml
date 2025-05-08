@@ -1,6 +1,8 @@
 services:
 
   # Wordpress Service
+  # Each service defines a single container's behavior including the image 
+  # it uses, the commands it runs, the ports it exposes, and its dependencies 
   wordpress:
     build:
       context: .
