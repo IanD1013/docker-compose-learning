@@ -1,0 +1,19 @@
+services:
+  wordpress:
+    build:
+      context: .
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wp_user
+      WORDPRESS_DB_PASSWORD: wp_password
+      WORDPRESS_DB_NAME: wp_database
+    
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: wp_database
+      MYSQL_USER: wp_user
+      MYSQL_PASSWORD: wp_password
