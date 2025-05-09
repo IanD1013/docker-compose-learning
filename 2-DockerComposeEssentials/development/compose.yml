@@ -1,7 +1,17 @@
 services:
   wordpress:
     build:
-      context: .
+      context: . # defines the directory containing the build files including the Dockerfile
+      dockerfile: Dockerfile # specifies the Dockerfile to use for building the image (not needed if the Dockerfile is named 'Dockerfile')
+      args:
+        WORDPRESS_SITE_NAME: "My Awesome Blog"
+        WORDPRESS_ADMIN_EMAIL: "admin@example.com"
+      target: development # specifies the target stage in a multi-stage Dockerfile to build
+      cache_from:
+        - wordpress:latest # specifies a cache source for the build to speed up the process
+      labels: 
+        maintainer: "ian.tung1013@gmail.com"
+        version: "1.0"
     ports:
       - "8080:80"
     environment:
