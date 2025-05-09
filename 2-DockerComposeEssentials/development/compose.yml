@@ -18,7 +18,7 @@ services:
     environment:
       WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
       WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
-      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      WORDPRESS_DB_PASSWORD_FILE: /run/secrets/wordpress_db_password
       WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
     volumes:
       - ./wp-content:/var/www/html/wp-content
@@ -27,14 +27,16 @@ services:
         ipv4_address: 192.168.1.2
     depends_on:
       - db
-    
+    secrets:
+      - wordpress_db_password
+
   db:
     image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_PASSWORD_FILE: /run/secrets/mysql_password
     volumes:
       - db_data:/var/lib/mysql
     networks:
@@ -46,6 +48,9 @@ services:
       timeout: 5s
       retries: 3
       start_period: 10s
+    secrets:
+      - mysql_root_password
+      - mysql_password
 
 networks:
   wordpress_network:
@@ -57,3 +62,15 @@ networks:
 
 volumes:
   db_data:
+    labels:
+      com.example.description: "Wordpress db storage"
+      com.example.owner: "Ian Dong"
+      com.example.environment: "Production"
+
+secrets: 
+  wordpress_db_password:
+    file: ./secrets/wordpress_db_password.txt
+  mysql_root_password:
+    file: ./secrets/mysql_root_password.txt
+  mysql_password:
+    file: ./secrets/mysql_password.txt
