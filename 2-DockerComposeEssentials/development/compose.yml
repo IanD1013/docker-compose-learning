@@ -25,6 +25,8 @@ services:
     networks:
       wordpress_network:
         ipv4_address: 192.168.1.2
+    depends_on:
+      - db
     
   db:
     image: mysql:latest
@@ -38,6 +40,12 @@ services:
     networks:
       wordpress_network:
         ipv4_address: 192.168.1.3
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
 networks:
   wordpress_network:
