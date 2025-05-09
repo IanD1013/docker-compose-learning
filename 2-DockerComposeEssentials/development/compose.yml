@@ -19,6 +19,11 @@ services:
       WORDPRESS_DB_USER: wp_user
       WORDPRESS_DB_PASSWORD: wp_password
       WORDPRESS_DB_NAME: wp_database
+    volumes:
+      - ./wp-content:/var/www/html/wp-content
+    networks:
+      wordpress_network:
+        ipv4_address: 192.168.1.2
     
   db:
     image: mysql:latest
@@ -27,3 +32,19 @@ services:
       MYSQL_DATABASE: wp_database
       MYSQL_USER: wp_user
       MYSQL_PASSWORD: wp_password
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      wordpress_network:
+        ipv4_address: 192.168.1.3
+
+networks:
+  wordpress_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24
+          gateway: 192.168.1.1
+
+volumes:
+  db_data:
