@@ -14,7 +14,7 @@ services:
         maintainer: "ian.tung1013@gmail.com"
         version: "1.0"
     ports:
-      - "8080:80"
+      - "80"
     environment:
       WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
       WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
@@ -24,11 +24,17 @@ services:
       - ./wp-content:/var/www/html/wp-content
     networks:
       wordpress_network:
-        ipv4_address: 192.168.1.4
     depends_on:
       - db
     secrets:
       - wordpress_db_password
+    deploy:
+      replicas: 3 
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
   db:
     image: mysql:latest
