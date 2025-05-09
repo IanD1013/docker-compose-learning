@@ -1,39 +1,75 @@
+name: ${PROD_PROJECT_NAME}
 services:
-
-  # Wordpress Service
-  # Each service defines a single container's behavior including the image 
-  # it uses, the commands it runs, the ports it exposes, and its dependencies 
   wordpress:
     build:
-      context: .
+      context: . 
+      dockerfile: Dockerfile 
+      args:
+        WORDPRESS_SITE_NAME: "My Awesome Blog"
+        WORDPRESS_ADMIN_EMAIL: "admin@example.com"
+      target: production
+      cache_from:
+        - wordpress:latest 
+      labels: 
+        maintainer: "ian.tung1013@gmail.com"
+        version: "1.0"
     ports:
       - "8080:80"
     environment:
       WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
       WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
-      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      WORDPRESS_DB_PASSWORD_FILE: /run/secrets/wordpress_db_password
       WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
     volumes:
       - ./wp-content:/var/www/html/wp-content
     networks:
       wordpress_network:
-        ipv4_address: 192.168.1.2
+        ipv4_address: 192.168.1.4
     depends_on:
       - db
+    secrets:
+      - wordpress_db_password
 
-  #Db Service
   db:
     image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_PASSWORD_FILE: /run/secrets/mysql_password
     volumes:
       - db_data:/var/lib/mysql
     networks:
       wordpress_network:
         ipv4_address: 192.168.1.3
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    secrets:
+      - mysql_root_password
+      - mysql_password
+    
+  migrate:
+    image: wordpress:cli
+    profiles: [staging]
+    depends_on:
+      - wordpress
+      - db
+    environment:
+      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+    # The command reads the WordPress DB password from the secret file and then runs a wp core download.
+    command: bash -c "export WORDPRESS_DB_PASSWORD=$(cat /run/secrets/wordpress_db_password) && wp core download --allow-root"
+    networks:
+      wordpress_network:
+        ipv4_address: 192.168.1.6
+    secrets:
+      - wordpress_db_password
+    restart: "no"  # Ensure this one-off task does not restart automatically
 
 networks:
   wordpress_network:
@@ -45,3 +81,15 @@ networks:
 
 volumes:
   db_data:
+    labels:
+      com.example.description: "Wordpress db storage"
+      com.example.owner: "Ian Dong"
+      com.example.environment: "Production"
+
+secrets: 
+  wordpress_db_password:
+    file: ./secrets/wordpress_db_password.txt
+  mysql_root_password:
+    file: ./secrets/mysql_root_password.txt
+  mysql_password:
+    file: ./secrets/mysql_password.txt

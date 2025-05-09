@@ -1,0 +1,30 @@
+name: ${DEV_PROJECT_NAME}
+services:
+  wordpress:
+    ports:
+      - "9090:80"
+    environment:
+      WORDPRESS_DB_PASSWORD_FILE: /run/secrets/wordpress_db_password_dev
+    secrets:
+      - wordpress_db_password_dev
+    
+  db:
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password_dev
+      MYSQL_PASSWORD_FILE: /run/secrets/mysql_password_dev
+    secrets:
+      - mysql_root_password_dev
+      - mysql_password_dev
+
+secrets:
+  wordpress_db_password_dev:
+    file: ./secrets/wordpress_db_password_dev.txt
+  mysql_root_password_dev:
+    file: ./secrets/mysql_root_password_dev.txt
+  mysql_password_dev:
+    file: ./secrets/mysql_password_dev.txt
+
+volumes:
+  db_data:
+    labels:
+      com.example.environment: "Development"
