@@ -1,3 +1,4 @@
+name: myappdev
 services:
   wordpress:
     build:
