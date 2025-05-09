@@ -51,6 +51,25 @@ services:
     secrets:
       - mysql_root_password
       - mysql_password
+    
+  migrate:
+    image: wordpress:cli
+    profiles: [staging]
+    depends_on:
+      - wordpress
+      - db
+    environment:
+      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+    # The command reads the WordPress DB password from the secret file and then runs a wp core download.
+    command: bash -c "export WORDPRESS_DB_PASSWORD=$(cat /run/secrets/wordpress_db_password) && wp core download --allow-root"
+    networks:
+      wordpress_network:
+        ipv4_address: 192.168.1.6
+    secrets:
+      - wordpress_db_password
+    restart: "no"  # Ensure this one-off task does not restart automatically
 
 networks:
   wordpress_network:
