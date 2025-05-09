@@ -7,6 +7,11 @@ services:
       WORDPRESS_DB_PASSWORD_FILE: /run/secrets/wordpress_db_password_dev
     secrets:
       - wordpress_db_password_dev
+    develop:
+      watch:
+        - path: ./test
+          target: /var/www/html/
+          action: sync
     
   db:
     environment:
