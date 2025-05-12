@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace # declare the kind of resource being created
+metadata:
+  name: hello-world
+
+# Namespace: virtual cluster within a k8s cluster that allows you to isolate and organize resources
+# kubectl apply -f namespace.yaml
