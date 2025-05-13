@@ -22,7 +22,7 @@
 
     private async Task GetPodcasts()
     {
-        _podcasts = await HttpClient.GetFromJsonAsync<List<string>>("http://localhost:5001/podcasts");
+        _podcasts = await HttpClient.GetFromJsonAsync<List<string>>("http://localhost:13659/podcasts");
     }
 
 }
