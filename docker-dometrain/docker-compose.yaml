@@ -3,7 +3,7 @@ services:
   frontend:
     build:
       context: ./DockerCourseFrontend/DockerCourseFrontend/.
-    image: frontend
+    image: iand1013/frontend
     container_name: frontend
     ports:
       - 1234:80
@@ -12,7 +12,7 @@ services:
     build:
       context: ./DockerCourseApi/.
       dockerfile: DockerCourseApi/Dockerfile
-    image: api
+    image: iand1013/api
     container_name: api
     ports:
       - 13659:80
