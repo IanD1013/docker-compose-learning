@@ -28,8 +28,8 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v4
         with:
-          context: ./DockerCourseApi/.
-          file: ./DockerCourseApi/DockerCourseApi/Dockerfile
+          context: ./docker-dometrain/DockerCourseApi/.
+          file: ./docker-dometrain/DockerCourseApi/DockerCourseApi/Dockerfile
           push: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/api:latest
