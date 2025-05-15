@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockerCourseApi", "DockerCourseApi\DockerCourseApi.csproj", "{D8D0ABE3-87CE-4B2E-AC84-8BDBCC230F4A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockerCourseApi.Tests", "DockerCourseApi.Tests\DockerCourseApi.Tests.csproj", "{2D76D0CA-066E-400F-BC66-DFE97142EC46}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{D8D0ABE3-87CE-4B2E-AC84-8BDBCC230F4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8D0ABE3-87CE-4B2E-AC84-8BDBCC230F4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8D0ABE3-87CE-4B2E-AC84-8BDBCC230F4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D76D0CA-066E-400F-BC66-DFE97142EC46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D76D0CA-066E-400F-BC66-DFE97142EC46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D76D0CA-066E-400F-BC66-DFE97142EC46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D76D0CA-066E-400F-BC66-DFE97142EC46}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
