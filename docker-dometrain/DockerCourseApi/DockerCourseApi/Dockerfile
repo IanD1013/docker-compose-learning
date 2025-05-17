@@ -13,4 +13,9 @@ EXPOSE 80
 EXPOSE 443
 WORKDIR /app
 COPY --from=build /app/publish .
+
+RUN adduser --disabled-password --gecos '' appuser
+RUN chown -R appuser:appuser /app/wwwroot
+USER appuser
+
 ENTRYPOINT ["dotnet", "DockerCourseApi.dll"]
