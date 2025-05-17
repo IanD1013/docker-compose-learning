@@ -153,3 +153,6 @@ mono_crash.*
 Network Trash Folder
 Temporary Items
 .apdisk 
+
+# Node modules
+**/node_modules/
